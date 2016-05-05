@@ -1,0 +1,63 @@
+#include <iostream>
+#include <cmath>
+#define pi 3.14159265359
+#define constant 0.04194745389 //relation between scale and meter from a resolution of 2448 x 3264 pixels
+using namespace std;
+char x;
+double Ax,Ay,Bx,By,Cx,Cy, d, op;
+
+void calc_length (double a, double b){
+    double size;
+    size= constant*a*b;
+    cout<<"The length of your object is of: "<<size<<" cm. "<<size*0.39370079<<" inches."<<endl;
+    cout<<"There can be a %Error around 5%, the %Error decreases as you get closer to 2 m.";
+}
+
+void calc_angle (double ax, double ay, double bx, double by, double cx, double cy){
+    double magnitud_AB, magnitud_AC, prod_punt, angle;
+    magnitud_AB= sqrt(pow((Bx-Ax),2) + pow((By-Ay),2));
+    magnitud_AC= sqrt(pow((Cx-Ax),2)+ pow((Cy-Ay),2));
+    prod_punt=((Bx-Ax)*(Cx-Ax))+((By-Ay)*(Cy-Ay));
+    angle= acos(prod_punt/(magnitud_AB * magnitud_AC));
+    cout<<"The interior angle in radians is: "<<angle<<", in degrees: "<<(angle*180)/pi<<endl;
+    cout<<"The exterior angle in radians is: "<<(2*pi)- angle<<", in degrees: "<<360-((angle*180)/pi)<<endl;
+    // You could get an error if when calculating the angle using the product point you get 0 in the denominator or if your numerator is bigger than your denominator (calculating the arccos of a number greater than 1)
+}
+
+int main() {
+    cout<<"I give the lengths of an object in centimeters and inches, or angles in radians and degrees. All of these using information from a digital picture."<<endl<<endl;
+    cout<<"Do you want to get angles? (type 'a'), do you want to get a length? (type 'l') ";
+    cin>>x;
+    while((x!='a')&&(x!='A')&&(x!='l')&&(x!='L')){
+        cout<<"You did not type a valid character. Do you want to get angles? (type 'a'), do you want to get a length? (type 'l')? ";
+        cin>>x;
+    }
+    if ((x=='a')||(x=='A')){
+        cout<<"Give me the coordinates of point A (where the two lines intersect)"<<endl;
+        cout << "x:";
+        cin >> Ax;
+        cout << "y:";
+        cin >> Ay;
+        cout<<"Give me the coordinates of point B: "<<endl;
+        cout << "x:";
+        cin >> Bx;
+        cout << "y:";
+        cin >> By;
+        cout<<"Give me the coordinates of point C:"<< endl;
+        cout<<"x:";
+        cin>>Cx;
+        cout << "y:";
+        cin >>Cy;
+        calc_angle (Ax,Ay,Bx,By,Cx,Cy);
+    }
+    else if ((x=='l')||(x=='L')){
+        cout<<"You need you to take the picture using a camera with a resolution of 2448 x 3264 pixels, and I need to know the distance from where the picture was taken, as well as the size of the object in pixels."<<endl;
+        cout<<"Distance from where the picture was taken (in m.): ";
+        cin>>d;
+        cout<<"Size of the object in pixels: ";
+        cin>>op;
+        calc_length (d, op);
+    }
+
+    return 0;
+}
